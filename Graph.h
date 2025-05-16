@@ -4,28 +4,29 @@
 #include <vector>
 
 //weighted edge-directed graphs
-struct Node { //also known as a vertex in graph
-
+struct Vertex { //also known as a nodes in graph
+  const char label;
 };
 
 
 class Graph {
-    public:
-        Graph();
+public:
+  Graph();
+  
+  void addVertex(char label);
 
-        void addVertex();
-        void addEdge();
-
-        void removeVertex();
-        void removeEdge();
-
-        void findShortestPath(); //use Dijkstra's algorithm
-
+  //source = 1st node ('from' node). dest = 2nd to ('to node). len = edge length
+  void addEdge(int source, int dest, int len); 
+  
+  void removeVertex(char label);
+  void removeEdge(int source, int dest);
+  
+  void findShortestPath(Vertex* v1, Vertex* v2); //use Dijkstra's algorithm
+  
 private:
-    int adjMatrix[20][20]{};
-    //        If there is an edge from vertex i to j, mark adjMat[i][j] as 1.
-    //        If there is no edge from vertex i to j, mark adjMat[i][j] as 0.
-    std::vector<Node> vertices; //vector of verticies (nodes)
+  int adjMatrix[20][20]{}; //in format [source][destination] / [from][to]. So 'x' axis is the from side, and the 'y' axis will be the to side. Ex: adjMatrix[1][3] = 1; //distance from 1 to 3 = 1
+  
+  std::vector<Vertex> vertices; //vector of verticies (nodes)
 };
 
 
