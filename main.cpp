@@ -55,8 +55,7 @@ bool userSelection(Graph* graph) {
       graph->addVertex(label);
       cin.ignore();
     } else if (strcasecmp(userInput, "ADD EDGE") == 0) {
-      int source;
-      int dest;
+      char source, dest;
       int len;
 
       cout << "Enter the SOURCE, DESINATION, LENGTH of the edge (separated by spaces)" << endl;
@@ -67,25 +66,34 @@ bool userSelection(Graph* graph) {
       cout << source << endl;
       cout << dest << endl;
       cout << len << endl;
+
+      Vertex* v1 = graph->getVertex(source);
+      Vertex* v2 = graph->getVertex(dest);
       
-      graph->addEdge(source, dest, len);
+      graph->addEdge(v1, v2, len);
       cin.ignore();
     } else if (strcasecmp(userInput, "REMOVE VERTEX") == 0) {
       cout << "Enter the label of the vertex you want to remove" << endl;
       char label;
       cin >> label;
-      removeVertex(label);
+      graph->removeVertex(label);
       cin.ignore();
     } else if (strcasecmp(userInput, "REMOVE EDGE") == 0) {
-      int source;
-      int dest;
-        cout << "Enter the SOURCE and DESTINATION of the edge you want to remove (separated by spaces)" << endl;
+      char source, dest;
+        cout << "Enter the SOURCE and DESTINATION vertices of the edge you want to remove (separated by spaces)" << endl;
 	cin >> source;
 	cin >> dest;
-	removeEdge(source, dest);
+	graph->removeEdge(source, dest);
 	cin.ignore();
     } else if (strcasecmp(userInput, "SHORTEST PATH") == 0) {
-      cout << "ENter the stufffff" << endl;
+      char label_1, label_2;
+      cout << "Enter the label of VERTEX 1 followed by VERTEX 2 (separated by spaces)" << endl;
+      cin >> label_1;
+      cin >> label_2;
+      Vertex* v1 = graph->getVertex(label_1);
+      Vertex* v2 = graph->getVertex(label_2);
+      cin.ignore();
+      graph->findShortestPath(v1, v2); //from v1 to v2
     }
     else if (strcasecmp(userInput, "QUIT") == 0) {
         return true;
