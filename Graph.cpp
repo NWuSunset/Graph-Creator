@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Graph.h"
+#include <climits>
 
 using namespace std;
 
@@ -29,14 +30,43 @@ void Graph::removeVertex(const char label) {
   //erase that from the vector
   vertices.erase(remove(vertices.begin(), vertices.end(), toRemove), vertices.end());
   delete toRemove;
+  tIndex--;
 }
 
 void Graph::removeEdge(Vertex* source, Vertex* dest) {
   adjMatrix[source->index][dest->index] = 0;
 }
 
-void Graph::findShortestPath(Vertex* v1, Vertex* v2) {
+void Graph::findShortestPath(Vertex* source, Vertex* dest, int numV) {
   
+  
+  priority_queue<Vertex*, vector<Vertex*>, greater<Vertex*>> pq; //stores vertex priority (integer) 
+  vector<int> dist(numV, INT_MAX); //vector of distances with values starting at 'infinity'
+
+  source->priority = 0;
+  pq.push(source); //add source to priority queue (distance to itself is 0)
+  dist[source->index] = 0;
+
+
+  
+  //loop through queue and let min = first vertex in queue, then compare it's adjacent vertices
+  while (!pq.empty()) {
+    //get the first vertex
+    Vertex* min = pq.top();
+    pq.pop(); //then pop it from the queue
+
+    //Then get all adjacent ones to min
+    for (int i = 0; i < tIndex, i++) {
+      if (adjMatrix[min->index][i] != 0) { //if there is adjacency
+	int alt = dist[min->index] + adjMatrix[min->index][i]; //alt = distance to min + distance from min to the adjacnt node
+
+	//if alt distance < distance to destination (neightbor to min)
+	if (alt < dist[])
+      }
+    }
+    //let neighbor be the adjacent vertex
+    //the distance to 
+  }
 }
 
 Vertex* Graph::getVertex(char label) {
