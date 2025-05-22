@@ -25,13 +25,19 @@ public:
   void addEdge(Vertex* source, Vertex* dest, int len); 
   
   void removeVertex(char label);
-  void removeEdge(int source, int dest);
+  void removeEdge(Vertex* source, Vertex* dest);
   
   void findShortestPath(Vertex* v1, Vertex* v2); //use Dijkstra's algorithm
   
   Vertex* getVertex(char label);
+
+  void printMatrix();
 private:
+  //note: distance of 0 means no connection (won't be displayed in print out)
   int adjMatrix[20][20]{}; //in format [source][destination] / [from][to]. So 'x' axis is the from side, and the 'y' axis will be the to side. Ex: adjMatrix[1][3] = 1; //distance from 1 to 3 = 1
+  
+ 
+  
   int tIndex = 0; //tracks index we are in the table
   std::vector<Vertex*> vertices; //vector of verticies (nodes)
 };

@@ -63,10 +63,6 @@ bool userSelection(Graph* graph) {
       cin >> dest;
       cin >> len;
 
-      cout << source << endl;
-      cout << dest << endl;
-      cout << len << endl;
-
       Vertex* v1 = graph->getVertex(source);
       Vertex* v2 = graph->getVertex(dest);
       
@@ -80,11 +76,15 @@ bool userSelection(Graph* graph) {
       cin.ignore();
     } else if (strcasecmp(userInput, "REMOVE EDGE") == 0) {
       char source, dest;
-        cout << "Enter the SOURCE and DESTINATION vertices of the edge you want to remove (separated by spaces)" << endl;
-	cin >> source;
-	cin >> dest;
-	graph->removeEdge(source, dest);
-	cin.ignore();
+      cout << "Enter the SOURCE and DESTINATION vertices of the edge you want to remove (separated by spaces)" << endl;
+      cin >> source;
+      cin >> dest;
+      
+      Vertex* v1 = graph->getVertex(source);
+      Vertex* v2 = graph->getVertex(dest);
+      
+      graph->removeEdge(v1, v2);
+      cin.ignore();
     } else if (strcasecmp(userInput, "SHORTEST PATH") == 0) {
       char label_1, label_2;
       cout << "Enter the label of VERTEX 1 followed by VERTEX 2 (separated by spaces)" << endl;
@@ -94,11 +94,13 @@ bool userSelection(Graph* graph) {
       Vertex* v2 = graph->getVertex(label_2);
       cin.ignore();
       graph->findShortestPath(v1, v2); //from v1 to v2
+    } else if (strcasecmp(userInput, "PRINT") == 0) {
+      graph->printMatrix();
     }
     else if (strcasecmp(userInput, "QUIT") == 0) {
-        return true;
+      return true;
     } else {
-        cout << "Invalid input." << endl;
+      cout << "Invalid input." << endl;
     }
     return false;
 }
