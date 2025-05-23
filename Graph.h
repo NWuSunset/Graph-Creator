@@ -30,8 +30,10 @@ public:
   void removeEdge(Vertex* source, Vertex* dest);
 
   
-  void findShortestPath(Vertex* source, Vertex* dest, int numV); //use Dijkstra's algorithm
-  
+  void findShortestPath(Vertex* source, Vertex* dest); //use Dijkstra's algorithm
+
+  std::vector<int> DijkstraAlgorithm(Vertex* source, int numV);
+
   Vertex* getVertex(char label);
 
   void printMatrix();

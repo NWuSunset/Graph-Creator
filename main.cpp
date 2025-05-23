@@ -93,7 +93,7 @@ bool userSelection(Graph* graph) {
       Vertex* v1 = graph->getVertex(label_1);
       Vertex* v2 = graph->getVertex(label_2);
       cin.ignore();
-      graph->findShortestPath(v1, v2, graph->tIndex); //from v1 to v2
+      graph->findShortestPath(v1, v2); //from v1 to v2
     } else if (strcasecmp(userInput, "PRINT") == 0) {
       graph->printMatrix();
     }
