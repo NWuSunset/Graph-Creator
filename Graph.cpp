@@ -38,19 +38,52 @@ void Graph::removeEdge(Vertex* source, Vertex* dest) {
 }
 
 void Graph::findShortestPath(Vertex* source, Vertex* dest) {
+    vector<int> prev = DijkstraAlgorithm(source, vertices.size());
+
+    vector<int> path;
+    int curr = dest->index;
+
+    /*
+    if (prev[curr] == 0 && curr != source->index) {
+        cout << "NO path exists" << source->label << "and " << dest->label << endl;
+        return;
+    } */
+
+    //build path
+    while (curr != 0) {
+        path.push_back(curr);
+        curr = prev[curr];
+    }
+
+    //Reverse
+    reverse(path.begin(), path.end());
+
     int pathLength = 0;
-    vector<int> path = DijkstraAlgorithm(source, tIndex + 1);
-    for (int i = 0; i < dest->index; i++) { //print a path until destination
-        cout << vertices[path[i]] << " "; //print out the labels
-        pathLength += path[i]; //add to path lenght
+
+    for (auto i = 0; i < path.size(); i++) {
+        cout << vertices[path[i]]->label;
+
+        //Add to distacne
+        if (i < path.size() - 1) {
+            int nextIndex = path[i+1];
+            pathLength += adjMatrix[path[i]][nextIndex];
+            cout << "->";
+        }
     }
     cout << endl;
     cout << "Total path length: " << pathLength << endl;
 }
 
 vector<int> Graph::DijkstraAlgorithm(Vertex* source, int numV) {
-    priority_queue<Vertex*, vector<Vertex*>, greater<Vertex*>> pq; //stores vertex priority (integer)
+    auto compare = [](Vertex* a, Vertex* b) //Comparison for priority queue
+    {
+        return a->priority > b->priority;
+    };
+
+    priority_queue<Vertex*, vector<Vertex*>, decltype(compare)> pq(compare); //stores vertex priority (integer)
     vector<int> dist(numV, INT_MAX); //vector of distances with values starting at 'infinity'
+    vector<int> prev(numV, -1); //previous vertrex in path
+    vector<bool> visited(numV, false); //tracked the visited vertices
 
     //set source priority and add it to the queue
     source->priority = 0;
@@ -62,25 +95,36 @@ vector<int> Graph::DijkstraAlgorithm(Vertex* source, int numV) {
     //Loop until we get to the destination node.
     while (!pq.empty()) {
         //get the first vertex
-        Vertex* min = pq.top();
+        Vertex* curr = pq.top();
         pq.pop(); //then pop it from the queue
 
-        //Then loop through all adjacent vertices to min
-        for (int a = 0; a < tIndex; a++) {
-            if (adjMatrix[min->index][a] != 0) { //if there is adjacency (distance != 0)
-                //alt = distance to min + distance from min to the adjacent node
-                const int alt = dist[min->index] + adjMatrix[min->index][a];
+        int u = curr->index; //easier to keep track
 
-                //if alt distance < distance to destination (neighbor to min)
-                if (alt < dist[a]) {
+        //ADDED
+        if (visited[u]) { //skip this one if it has been visited already
+            continue;
+        }
+        visited[u] = true;
+
+        //Then loop through all adjacent vertices to min
+        for (int v = 0; v < tIndex; v++) {
+            if (adjMatrix[u][v] != 0) { //if there is adjacency (distance != 0)
+                //alt = distance to min + distance from min to the adjacent node
+                const int alt = dist[u] + adjMatrix[u][v];
+
+                //if alt distance < distance to destination then we found a better path
+                if (alt < dist[v]) {
                     //Then update the distance to the adjacent node in the distance vector (index represented by a)
-                    dist[a] = alt;
-                    pq.push(vertices[a]); //also update the priority queue with the new info
+                    dist[v] = alt;
+                    prev[v] = u;
+
+                    vertices[v]->priority = alt;
+                    pq.push(vertices[v]); //also update the priority queue with the new info
                 }
             }
         }
     }
-    return dist; //return the distance vector, it's indices should match with the vertices vector
+    return prev; //return the prev vector (so we can go backwards), it's indices should match with the vertices vector
 }
 
 Vertex* Graph::getVertex(char label) {
