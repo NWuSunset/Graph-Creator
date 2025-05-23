@@ -56,7 +56,7 @@ bool userSelection(Graph* graph) {
       cin.ignore();
     } else if (strcasecmp(userInput, "ADD EDGE") == 0) {
       char source, dest;
-      int len;
+      int len = 0;
 
       cout << "Enter the SOURCE, DESINATION, LENGTH of the edge (separated by spaces)" << endl;
       cin >> source;
@@ -65,8 +65,10 @@ bool userSelection(Graph* graph) {
 
       Vertex* v1 = graph->getVertex(source);
       Vertex* v2 = graph->getVertex(dest);
-      
-      graph->addEdge(v1, v2, len);
+
+      if (v1 != nullptr || v2 != nullptr) {
+        graph->addEdge(v1, v2, len);
+      }
       cin.ignore();
     } else if (strcasecmp(userInput, "REMOVE VERTEX") == 0) {
       cout << "Enter the label of the vertex you want to remove" << endl;
@@ -82,8 +84,10 @@ bool userSelection(Graph* graph) {
       
       Vertex* v1 = graph->getVertex(source);
       Vertex* v2 = graph->getVertex(dest);
-      
-      graph->removeEdge(v1, v2);
+
+      if (v1 != nullptr || v2 != nullptr) {
+        graph->removeEdge(v1, v2);
+      }
       cin.ignore();
     } else if (strcasecmp(userInput, "SHORTEST PATH") == 0) {
       char label_1, label_2;
@@ -93,7 +97,9 @@ bool userSelection(Graph* graph) {
       Vertex* v1 = graph->getVertex(label_1);
       Vertex* v2 = graph->getVertex(label_2);
       cin.ignore();
-      graph->findShortestPath(v1, v2); //from v1 to v2
+      if (v1 != nullptr || v2 != nullptr) {
+        graph->findShortestPath(v1, v2); //from v1 to v2
+      }
     } else if (strcasecmp(userInput, "PRINT") == 0) {
       graph->printMatrix();
     }

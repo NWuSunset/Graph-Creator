@@ -38,32 +38,33 @@ void Graph::removeEdge(Vertex* source, Vertex* dest) {
 }
 
 void Graph::findShortestPath(Vertex* source, Vertex* dest) {
-    vector<int> prev = DijkstraAlgorithm(source, vertices.size());
+    const vector<int> prev = DijkstraAlgorithm(source, vertices.size());
 
     vector<int> path;
-    int curr = dest->index;
+    int curr = dest->index; //start at the destination's index
 
-    /*
-    if (prev[curr] == 0 && curr != source->index) {
+    //If previous has not been updated in the algorithm function
+    if (prev[curr] == -1 && curr != source->index) {
         cout << "NO path exists" << source->label << "and " << dest->label << endl;
         return;
-    } */
+    }
 
-    //build path
-    while (curr != 0) {
+    //Build the path (from the destination index going backward).
+    while (curr != -1) {
         path.push_back(curr);
         curr = prev[curr];
     }
 
-    //Reverse
+    //Reverse the path to show it going forward.
     reverse(path.begin(), path.end());
 
     int pathLength = 0;
 
+    //then go through the path and display it.
     for (auto i = 0; i < path.size(); i++) {
         cout << vertices[path[i]]->label;
 
-        //Add to distacne
+        //update distance
         if (i < path.size() - 1) {
             int nextIndex = path[i+1];
             pathLength += adjMatrix[path[i]][nextIndex];
@@ -77,12 +78,12 @@ void Graph::findShortestPath(Vertex* source, Vertex* dest) {
 vector<int> Graph::DijkstraAlgorithm(Vertex* source, int numV) {
     auto compare = [](Vertex* a, Vertex* b) //Comparison for priority queue
     {
-        return a->priority > b->priority;
+        return a->priority > b->priority; //if first vertex priority > second vertex priority.
     };
 
     priority_queue<Vertex*, vector<Vertex*>, decltype(compare)> pq(compare); //stores vertex priority (integer)
     vector<int> dist(numV, INT_MAX); //vector of distances with values starting at 'infinity'
-    vector<int> prev(numV, -1); //previous vertrex in path
+    vector<int> prev(numV, -1); //previous vertex in path (represented by -1)
     vector<bool> visited(numV, false); //tracked the visited vertices
 
     //set source priority and add it to the queue
@@ -98,13 +99,14 @@ vector<int> Graph::DijkstraAlgorithm(Vertex* source, int numV) {
         Vertex* curr = pq.top();
         pq.pop(); //then pop it from the queue
 
-        int u = curr->index; //easier to keep track
+        const int u = curr->index; //easier to keep track
 
+        /*
         //ADDED
         if (visited[u]) { //skip this one if it has been visited already
             continue;
         }
-        visited[u] = true;
+        visited[u] = true; */
 
         //Then loop through all adjacent vertices to min
         for (int v = 0; v < tIndex; v++) {
@@ -119,7 +121,7 @@ vector<int> Graph::DijkstraAlgorithm(Vertex* source, int numV) {
                     prev[v] = u;
 
                     vertices[v]->priority = alt;
-                    pq.push(vertices[v]); //also update the priority queue with the new info
+                    pq.push(vertices[v]); //also update the priority queue with the new info (decrease priority of v)
                 }
             }
         }
