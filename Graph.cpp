@@ -84,7 +84,7 @@ vector<int> Graph::DijkstraAlgorithm(Vertex* source, int numV) {
     priority_queue<Vertex*, vector<Vertex*>, decltype(compare)> pq(compare); //stores vertex priority (integer)
     vector<int> dist(numV, INT_MAX); //vector of distances with values starting at 'infinity'
     vector<int> prev(numV, -1); //previous vertex in path (represented by -1)
-    vector<bool> visited(numV, false); //tracked the visited vertices
+   // vector<bool> visited(numV, false); //tracked the visited vertices
 
     //set source priority and add it to the queue
     source->priority = 0;
@@ -100,13 +100,6 @@ vector<int> Graph::DijkstraAlgorithm(Vertex* source, int numV) {
         pq.pop(); //then pop it from the queue
 
         const int u = curr->index; //easier to keep track
-
-        /*
-        //ADDED
-        if (visited[u]) { //skip this one if it has been visited already
-            continue;
-        }
-        visited[u] = true; */
 
         //Then loop through all adjacent vertices to min
         for (int v = 0; v < tIndex; v++) {
